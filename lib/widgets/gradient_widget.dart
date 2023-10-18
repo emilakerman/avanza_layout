@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:avanza_app/constants/app_sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_line_graph/gradient_line_graph.dart';
 

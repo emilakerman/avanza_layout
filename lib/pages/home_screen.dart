@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:avanza_app/constants/app_colors.dart';
 import 'package:avanza_app/constants/app_paddings.dart';
 import 'package:avanza_app/constants/app_sizes.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,7 +12,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    double netWorth = 9500;
+    double netWorth = 3762;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -77,27 +78,27 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              _buildIconWithText(color: Colors.blue, text: "AF"),
+                              _buildIconWithText(
+                                color: Colors.blue,
+                                text: "AF",
+                                icon: Icons.circle,
+                                size: 35,
+                              ),
                               AppSizes.smallHorizontal,
                               const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "423012",
-                                    style: TextStyle(color: AppColors.white),
-                                  ),
-                                  Text(
-                                    "Tillg. för köp 0 kr",
-                                    style: TextStyle(color: AppColors.white),
-                                  ),
+                                  Text("423012", style: TextStyle(color: AppColors.white)),
+                                  Text("Tillg. för köp 0 kr",
+                                      style: TextStyle(color: AppColors.white)),
                                 ],
                               ),
                             ],
                           ),
-                          const Column(
+                          Column(
                             children: [
-                              Text("0 kr", style: TextStyle(color: AppColors.white)),
-                              Text("0.0%", style: TextStyle(color: AppColors.white)),
+                              _buildCommonText(text: "0 kr"),
+                              _buildCommonText(text: "0.0%"),
                             ],
                           )
                         ],
@@ -108,27 +109,26 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              _buildIconWithText(color: Colors.red, text: "ISK"),
+                              _buildIconWithText(
+                                color: Colors.red,
+                                text: "ISK",
+                                icon: Icons.circle,
+                                size: 35,
+                              ),
                               AppSizes.smallHorizontal,
-                              const Column(
+                              Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "423019",
-                                    style: TextStyle(color: AppColors.white),
-                                  ),
-                                  Text(
-                                    "Tillg. för köp 84 kr",
-                                    style: TextStyle(color: AppColors.white),
-                                  ),
+                                  _buildCommonText(text: "423019 kr"),
+                                  _buildCommonText(text: "Tillg. för köp 84 kr"),
                                 ],
                               ),
                             ],
                           ),
-                          const Column(
+                          Column(
                             children: [
-                              Text("9301 kr", style: TextStyle(color: AppColors.white)),
-                              Text("-11.05%", style: TextStyle(color: AppColors.white)),
+                              _buildCommonText(text: "9301 kr"),
+                              _buildCommonText(text: "-11.05%"),
                             ],
                           )
                         ],
@@ -141,9 +141,7 @@ class HomeScreen extends StatelessWidget {
               _buildContainer(
                 screenWidth: screenSize.width,
                 height: 150,
-                childWidget: ProgressIndicatorExample(
-                  netWorth: netWorth,
-                ),
+                childWidget: _buildInnerMileStoneContainer(netWorth: netWorth),
               ),
               AppSizes.largeVertical,
               _buildContainer(
@@ -158,13 +156,63 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildIconWithText({required Color color, required String text}) {
+  Widget _buildInnerMileStoneContainer({required double netWorth}) {
+    const int mileStoneValue = 10000;
+
+    String convertToAbbrevation({required int value}) {
+      return NumberFormat.compact().format(value);
+    }
+
+    return Row(
+      children: [
+        _buildIconWithText(
+          color: AppColors.darkGreen,
+          text: convertToAbbrevation(value: mileStoneValue),
+          icon: Icons.circle_notifications,
+          size: 90,
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildCommonText(text: "Nästa milstolpe", fontSize: 18),
+              _buildCommonText(text: mileStoneValue.toString(), fontSize: 24),
+              const SizedBox(height: 10),
+              ProgressIndicatorExample(
+                netWorth: netWorth,
+              ),
+              const SizedBox(height: 10),
+              _buildCommonText(text: "${mileStoneValue - netWorth.toInt()} kr kvar", fontSize: 15),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Text _buildCommonText({
+    required String text,
+    double? fontSize,
+  }) {
+    return Text(
+      text,
+      style: TextStyle(fontSize: fontSize, color: AppColors.white),
+    );
+  }
+
+  Widget _buildIconWithText({
+    required Color color,
+    required String text,
+    required IconData icon,
+    required double size,
+  }) {
     return Stack(
       alignment: Alignment.center,
       children: [
         Icon(
-          Icons.circle,
-          size: 35,
+          icon,
+          size: size,
           color: color,
         ),
         Text(
@@ -240,9 +288,5 @@ class HomeScreen extends StatelessWidget {
       text,
       style: const TextStyle(color: AppColors.white),
     );
-  }
-
-  Widget _buildProgressBar() {
-    return LinearProgressIndicator();
   }
 }
