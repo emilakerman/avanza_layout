@@ -20,7 +20,7 @@ class NetWorthController extends _$NetWorthController {
 class MileStoneController extends _$MileStoneController {
   @override
   int build() => 10000;
-  // Used with the right arrow
+  // Used with the right arrow, remove later
   void incrementMileStone() {
     state = state + 10000;
   }
