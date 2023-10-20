@@ -9,8 +9,7 @@ class NetWorthController extends _$NetWorthController {
   @override
   double build() => 3660;
 
-  // Currently unused
-  // Create "mock" way to add funds to account?
+  // Used currently to randomize networth for testing purposes.
   void changeNetWorth({required double newNetWorth}) {
     state = newNetWorth;
   }
@@ -18,10 +17,19 @@ class NetWorthController extends _$NetWorthController {
 
 @riverpod
 class MileStoneController extends _$MileStoneController {
+  // This milestone state should increase to 20K when networth >= 10K, etc.
   @override
   int build() => 10000;
-  // Used with the right arrow, remove later
+  // Used with the right arrow for testing, remove later.
   void incrementMileStone() {
     state = state + 10000;
   }
+}
+
+@riverpod
+class FlutterSwitchController extends _$FlutterSwitchController {
+  @override
+  bool build() => false;
+
+  void reverseState() => state = !state;
 }
