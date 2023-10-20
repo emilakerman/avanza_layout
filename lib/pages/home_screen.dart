@@ -1,7 +1,8 @@
 import 'dart:math';
-
 import 'package:avanza_app/constants/dividers.dart';
 import 'package:avanza_app/controllers/home_screen_controller.dart';
+import 'package:avanza_app/widgets/flutter_switch_widget.dart';
+import 'package:avanza_app/widgets/gradient_widget.dart';
 import 'package:avanza_app/widgets/progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:avanza_app/constants/app_colors.dart';
@@ -202,14 +203,14 @@ class HomeScreen extends StatelessWidget {
                   )
                 ],
               ),
-              const SizedBox(height: 10),
+              AppSizes.smallVertical,
               Consumer(
                 builder: (_, ref, __) => ProgressIndicatorExample(
                   netWorth: netWorth,
                   mileStone: mileStoneValue.toDouble(),
                 ),
               ),
-              const SizedBox(height: 10),
+              AppSizes.smallVertical,
               _buildCommonText(text: "${mileStoneValue - netWorth.toInt()} kr kvar", fontSize: 15),
             ],
           ),
@@ -231,10 +232,11 @@ class HomeScreen extends StatelessWidget {
   Widget _buildCommonText({
     required String text,
     double? fontSize,
+    Color? color,
   }) {
     return Text(
       text,
-      style: TextStyle(fontSize: fontSize, color: AppColors.white),
+      style: TextStyle(fontSize: fontSize, color: color ?? AppColors.white),
     );
   }
 
@@ -271,13 +273,10 @@ class HomeScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Totalt värde",
-                style: TextStyle(color: AppColors.white),
-              ),
+              _buildCommonText(text: 'Totalt värde', color: AppColors.darkGreen, fontSize: 15),
               IconButton(
                 icon: const Icon(Icons.fullscreen),
-                color: AppColors.white,
+                color: AppColors.darkGreen,
                 //TODO(Emil): Add functionality.
                 onPressed: () {},
               ),
@@ -285,9 +284,21 @@ class HomeScreen extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                "$netWorth kr",
-                style: const TextStyle(color: AppColors.white),
+              _buildCommonText(text: "$netWorth kr", fontSize: 22),
+            ],
+          ),
+          AppSizes.mediumVertical,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const FlutterSwitchWidget(),
+              // This shows difference from last month, but is hardcoded for now.
+              Consumer(
+                builder: (_, ref, __) => _buildCommonText(
+                  text: ref.watch(flutterSwitchControllerProvider) ? "-1037 kr" : "-11,05%",
+                  color: AppColors.red,
+                  fontSize: 18,
+                ),
               ),
             ],
           ),
