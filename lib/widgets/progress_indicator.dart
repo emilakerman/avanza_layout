@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class ProgressIndicatorExample extends StatefulWidget {
   final double netWorth;
+  final double mileStone;
 
   const ProgressIndicatorExample({
     super.key,
     required this.netWorth,
+    required this.mileStone,
   });
 
   @override
@@ -21,7 +23,7 @@ class _ProgressIndicatorExampleState extends State<ProgressIndicatorExample> {
       child: LinearProgressIndicator(
         color: AppColors.darkGreen,
         backgroundColor: AppColors.darkGreen.withOpacity(0.3),
-        value: widget.netWorth / 10000,
+        value: widget.netWorth / widget.mileStone,
       ),
     );
   }

@@ -1,10 +1,14 @@
+import 'dart:math';
+
 import 'package:avanza_app/constants/dividers.dart';
+import 'package:avanza_app/controllers/home_screen_controller.dart';
 import 'package:avanza_app/widgets/progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:avanza_app/constants/app_colors.dart';
 import 'package:avanza_app/constants/app_paddings.dart';
 import 'package:avanza_app/constants/app_sizes.dart';
 import 'package:intl/intl.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +16,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    double netWorth = 3762;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -38,7 +41,13 @@ class HomeScreen extends StatelessWidget {
               _buildContainer(
                 screenWidth: screenSize.width,
                 height: 150,
-                childWidget: _buildInnerTopContainer(netWorth: netWorth),
+                childWidget: Consumer(
+                  builder: (_, ref, __) {
+                    return _buildInnerTopContainer(
+                      netWorth: ref.watch(netWorthControllerProvider),
+                    );
+                  },
+                ),
               ),
               AppSizes.largeVertical,
               _buildContainer(
@@ -141,7 +150,12 @@ class HomeScreen extends StatelessWidget {
               _buildContainer(
                 screenWidth: screenSize.width,
                 height: 150,
-                childWidget: _buildInnerMileStoneContainer(netWorth: netWorth),
+                childWidget: Consumer(builder: (_, ref, __) {
+                  return _buildInnerMileStoneContainer(
+                    ref: ref,
+                    netWorth: ref.read(netWorthControllerProvider),
+                  );
+                }),
               ),
               AppSizes.largeVertical,
               _buildContainer(
@@ -152,13 +166,14 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
+        floatingActionButton: Consumer(builder: (_, ref, __) => _buildAddFundsButton(ref: ref)),
       ),
     );
   }
 
-  Widget _buildInnerMileStoneContainer({required double netWorth}) {
-    const int mileStoneValue = 10000;
-
+  Widget _buildInnerMileStoneContainer({required double netWorth, required WidgetRef ref}) {
+    int mileStoneValue = ref.watch(mileStoneControllerProvider);
+    ref.watch(netWorthControllerProvider);
     String convertToAbbrevation({required int value}) {
       return NumberFormat.compact().format(value);
     }
@@ -177,10 +192,22 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCommonText(text: "Nästa milstolpe", fontSize: 18),
-              _buildCommonText(text: mileStoneValue.toString(), fontSize: 24),
+              Row(
+                children: [
+                  _buildCommonText(text: mileStoneValue.toString(), fontSize: 24),
+                  IconButton(
+                    onPressed: () =>
+                        ref.read(mileStoneControllerProvider.notifier).incrementMileStone(),
+                    icon: const Icon(Icons.arrow_right, color: AppColors.darkGreen),
+                  )
+                ],
+              ),
               const SizedBox(height: 10),
-              ProgressIndicatorExample(
-                netWorth: netWorth,
+              Consumer(
+                builder: (_, ref, __) => ProgressIndicatorExample(
+                  netWorth: netWorth,
+                  mileStone: mileStoneValue.toDouble(),
+                ),
               ),
               const SizedBox(height: 10),
               _buildCommonText(text: "${mileStoneValue - netWorth.toInt()} kr kvar", fontSize: 15),
@@ -191,7 +218,17 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Text _buildCommonText({
+  Widget _buildAddFundsButton({required WidgetRef ref}) {
+    return FloatingActionButton(
+      onPressed: () => ref.read(netWorthControllerProvider.notifier).changeNetWorth(
+            newNetWorth: Random().nextInt(5000).toDouble(),
+          ),
+      backgroundColor: AppColors.darkGreen,
+      child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _buildCommonText({
     required String text,
     double? fontSize,
   }) {
