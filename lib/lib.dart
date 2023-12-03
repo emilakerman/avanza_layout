@@ -1,5 +1,5 @@
-export 'constants/constants.dart';
-export 'controllers/controllers.dart';
+export 'src/constants/constants.dart';
+export 'src/controllers/controllers.dart';
 export 'main.dart';
-export 'pages/pages.dart';
-export 'widgets/widgets.dart';
+export 'src/pages/pages.dart';
+export 'src/widgets/widgets.dart';

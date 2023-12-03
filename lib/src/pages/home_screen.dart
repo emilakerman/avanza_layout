@@ -1,13 +1,12 @@
 import 'dart:math';
-import 'package:avanza_app/constants/dividers.dart';
-import 'package:avanza_app/controllers/home_screen_controller.dart';
-import 'package:avanza_app/widgets/flutter_switch_widget.dart';
-import 'package:avanza_app/widgets/gradient_widget.dart';
-import 'package:avanza_app/widgets/progress_indicator.dart';
+import 'package:avanza_app/src/constants/app_dividers.dart';
+import 'package:avanza_app/src/controllers/home_screen_controller.dart';
+import 'package:avanza_app/src/widgets/flutter_switch_widget.dart';
+import 'package:avanza_app/src/widgets/progress_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:avanza_app/constants/app_colors.dart';
-import 'package:avanza_app/constants/app_paddings.dart';
-import 'package:avanza_app/constants/app_sizes.dart';
+import 'package:avanza_app/src/constants/app_colors.dart';
+import 'package:avanza_app/src/constants/app_paddings.dart';
+import 'package:avanza_app/src/constants/app_sizes.dart';
 import 'package:intl/intl.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,7 +15,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
+    final Size screenSize = MediaQuery.of(context).size;
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -69,7 +68,7 @@ class HomeScreen extends StatelessWidget {
                             "Sparande",
                             style: TextStyle(
                               color: AppColors.white,
-                              fontSize: 20,
+                              fontSize: AppSizes.largeFont,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -82,7 +81,7 @@ class HomeScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      Dividers.whiteDivider,
+                      AppDividers.whiteDivider,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -113,7 +112,7 @@ class HomeScreen extends StatelessWidget {
                           )
                         ],
                       ),
-                      Dividers.whiteDivider,
+                      AppDividers.whiteDivider,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -192,10 +191,10 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCommonText(text: "Nästa milstolpe", fontSize: 18),
+              _buildCommonText(text: "Nästa milstolpe", fontSize: AppSizes.mediumFont),
               Row(
                 children: [
-                  _buildCommonText(text: mileStoneValue.toString(), fontSize: 24),
+                  _buildCommonText(text: mileStoneValue.toString(), fontSize: AppSizes.xLargefont),
                   IconButton(
                     onPressed: () =>
                         ref.read(mileStoneControllerProvider.notifier).incrementMileStone(),

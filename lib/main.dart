@@ -1,7 +1,7 @@
-import 'package:avanza_app/pages/home_screen.dart';
+import 'package:avanza_app/src/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(ProviderScope(child: const HomeScreen()));
+  runApp(const ProviderScope(child: HomeScreen()));
 }
